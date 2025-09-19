@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["python39", "chromium", "glib", "libffi", "libgcc", "zlib", "gcc"]
+
+[phases.install]
+cmds = [
+  "pip install -r requirements.txt",
+  "playwright install chromium"
+]
+
+[phases.build]
+cmds = ["echo 'Build complete'"]
+
+[start]
+cmd = "python bot.py"
