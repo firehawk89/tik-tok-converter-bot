@@ -5,7 +5,8 @@ from tiktokapipy.async_api import AsyncTikTokAPI
 
 async def download_tiktok(url: str) -> bytes | None:
     try:
-        async with AsyncTikTokAPI() as api:
+        # Use navigation retries and timeout settings for better reliability
+        async with AsyncTikTokAPI(navigation_retries=3, navigation_timeout=15) as api:
             video = await api.video(url)
             if not video:
                 logging.error("Failed to get video info")
