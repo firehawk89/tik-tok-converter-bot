@@ -2,7 +2,7 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 from config import BOT_TOKEN
-from handlers import handle_tiktok
+from handlers import register_handlers 
 
 logging.basicConfig(
     level=logging.INFO,
@@ -11,7 +11,8 @@ logging.basicConfig(
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
-dp.message.register(handle_tiktok)
+
+register_handlers(dp, bot)
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
