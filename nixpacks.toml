@@ -1,10 +1,10 @@
 [phases.setup]
-nixPkgs = ["python39", "chromium", "glib", "libffi", "libgcc", "zlib", "gcc"]
+nixPkgs = ["python39", "python39Packages.pip", "chromium", "glib", "libffi", "libgcc", "zlib", "gcc"]
 
 [phases.install]
 cmds = [
-  "pip install -r requirements.txt",
-  "playwright install chromium"
+  "python -m pip install -r requirements.txt",
+  "python -m playwright install chromium"
 ]
 
 [phases.build]
