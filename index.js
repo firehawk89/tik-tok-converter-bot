@@ -44,8 +44,6 @@ const listenToMessages = message => {
         }
       })
     })
-  } else {
-    bot.sendMessage(chat.id, '🧐 Please send a valid video link')
   }
 }
 
