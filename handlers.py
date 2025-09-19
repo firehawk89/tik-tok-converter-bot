@@ -8,7 +8,6 @@ TIKTOK_REGEX = re.compile(r"(https?://(www\.)?(tiktok\.com|vm\.tiktok\.com)/[^\s
 
 def register_handlers(dp, bot):
     @dp.message(F.text)
-	
     async def handle_tiktok(message: Message):
         match = TIKTOK_REGEX.search(message.text)
         if not match:
