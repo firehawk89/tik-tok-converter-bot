@@ -23,25 +23,29 @@ const listenToMessages = message => {
       bot.sendMessage(chat.id, '✨ Please send the video link'),
     )
   } else if (messageText.includes('tiktok.com')) {
-    bot.sendMessage(chat.id, '⏳Please wait...')
+    bot.deleteMessage(chat.id, message.message_id)
 
-    const tikTokApiUrl =
-      'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
+    bot.sendMessage(chat.id, '⏳Please wait...').then(waitMessage => {
+      const tikTokApiUrl =
+        'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
 
-    request(tikTokApiUrl, function (error, response, body) {
-      const json = JSON.parse(body)
+      request(tikTokApiUrl, function (error, response, body) {
+        const json = JSON.parse(body)
 
-      if (json.data == undefined) {
-        bot.sendMessage(
-          chat.id,
-          "😔 Sorry, I can't download this video right now. Please try again later.",
-        )
-      } else {
-        sleep(500).then(() => bot.sendVideo(chat.id, json.data.hdplay))
-      }
+        if (json.data == undefined) {
+          bot.deleteMessage(chat.id, waitMessage.message_id)
+          bot.sendMessage(
+            chat.id,
+            "😔 Sorry, I can't download this video right now. Please try again later.",
+          )
+        } else {
+          bot.deleteMessage(chat.id, waitMessage.message_id)
+          sleep(500).then(() => bot.sendVideo(chat.id, json.data.hdplay))
+        }
+      })
     })
   } else {
-    bot.sendMessage(msg.chat.id, '🧐 Please send a valid video link')
+    bot.sendMessage(chat.id, '🧐 Please send a valid video link')
   }
 }
 
