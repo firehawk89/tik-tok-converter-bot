@@ -28,7 +28,7 @@ const listenToMessages = message => {
     const tikTokApiUrl =
       'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
 
-    request(tikTokApiUrl, function (_, _, body) {
+    request(tikTokApiUrl, function (error, response, body) {
       const json = JSON.parse(body)
 
       if (json.data == undefined) {
