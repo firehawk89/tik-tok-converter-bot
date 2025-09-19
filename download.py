@@ -1,7 +1,7 @@
 import logging
 import re
 from TikTokApi import TikTokApi
-from config import MS_TOKEN, TIKTOK_BROWSER
+from config import MS_TOKEN
 
 async def download_tiktok(url: str) -> bytes | None:
     try:
