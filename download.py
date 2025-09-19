@@ -9,8 +9,7 @@ async def download_tiktok(url: str) -> bytes | None:
             await api.create_sessions(
                 ms_tokens=[MS_TOKEN] if MS_TOKEN else None, 
                 num_sessions=1, 
-                sleep_after=3, 
-                browser=TIKTOK_BROWSER
+                sleep_after=3
             )
             
             video_id = extract_video_id(url)
