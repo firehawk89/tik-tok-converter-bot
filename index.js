@@ -14,7 +14,7 @@ const bot = new Telegram(token, {
 const sleep = time => new Promise(resolve => setTimeout(resolve, time))
 
 const listenToMessages = message => {
-  const { text: messageText, chat } = message
+  const { text: messageText, chat, from } = message
 
   if (messageText == '/start') {
     bot.sendMessage(chat.id, '👋 Hi, I am a bot for downloading TikTok videos.')
@@ -40,7 +40,14 @@ const listenToMessages = message => {
           )
         } else {
           bot.deleteMessage(chat.id, waitMessage.message_id)
-          sleep(500).then(() => bot.sendVideo(chat.id, json.data.hdplay))
+
+          const senderName =
+            from.first_name + (from.last_name ? ` ${from.last_name}` : '')
+          const caption = `📤 Shared by: ${senderName}`
+
+          sleep(500).then(() =>
+            bot.sendVideo(chat.id, json.data.hdplay, { caption }),
+          )
         }
       })
     })
