@@ -1,8 +1,6 @@
-import Telegram from 'node-telegram-bot-api'
+import Telegram, { type Message } from 'node-telegram-bot-api'
 import request from 'request'
-import config from './config.js'
-
-сщті
+import config from './config'
 
 const token = config.botToken
 if (!token) {
@@ -13,18 +11,19 @@ const bot = new Telegram(token, {
   polling: true,
 })
 
-const sleep = time => new Promise(resolve => setTimeout(resolve, time))
+const sleep = (time: number) =>
+  new Promise(resolve => setTimeout(resolve, time))
 
-const listenToMessages = message => {
+const listenToMessages = (message: Message) => {
   const { text: messageText, chat, from } = message
 
-  if (messageText == '/start') {
+  if (messageText === '/start') {
     bot.sendMessage(chat.id, '👋 Hi, I am a bot for downloading TikTok videos.')
 
     sleep(500).then(() =>
       bot.sendMessage(chat.id, '✨ Please send the video link'),
     )
-  } else if (messageText.includes('tiktok.com')) {
+  } else if (messageText?.includes('tiktok.com')) {
     bot.sendMessage(chat.id, '⏳Please wait...').then(waitMessage => {
       const tikTokApiUrl =
         'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
@@ -42,8 +41,9 @@ const listenToMessages = message => {
           bot.deleteMessage(chat.id, message.message_id)
           bot.deleteMessage(chat.id, waitMessage.message_id)
 
-          const senderName =
-            from.first_name + (from.last_name ? ` ${from.last_name}` : '')
+          const senderFirstName = from?.first_name ?? 'Unknown'
+          const senderLastName = from?.last_name ? ` ${from.last_name}` : ''
+          const senderName = `${senderFirstName}${senderLastName}`
           const caption = `📤 Shared by: ${senderName}`
 
           sleep(500).then(() =>

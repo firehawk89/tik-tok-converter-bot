@@ -1,20 +1,33 @@
 {
   "name": "tik-tok-converter-bot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "dev": "tsc -w",
+    "build": "tsc --noEmit false",
+    "start": "node dist/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "tiktok",
+    "bot",
+    "telegram",
+    "download",
+    "video"
+  ],
+  "author": "https://github.com/firehawk89",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "prettier": "^3.6.2"
-  },
+  "description": "A bot for downloading TikTok videos",
   "dependencies": {
+    "request": "^2.88.2",
     "dotenv": "^17.2.2",
     "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/node-telegram-bot-api": "^0.64.11",
+    "@types/request": "^2.48.13",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
   }
 }
