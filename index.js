@@ -2,6 +2,8 @@ import Telegram from 'node-telegram-bot-api'
 import request from 'request'
 import config from './config.js'
 
+сщті
+
 const token = config.botToken
 if (!token) {
   throw new Error('BOT_TOKEN is not set')
@@ -23,8 +25,6 @@ const listenToMessages = message => {
       bot.sendMessage(chat.id, '✨ Please send the video link'),
     )
   } else if (messageText.includes('tiktok.com')) {
-    bot.deleteMessage(chat.id, message.message_id)
-
     bot.sendMessage(chat.id, '⏳Please wait...').then(waitMessage => {
       const tikTokApiUrl =
         'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
@@ -39,6 +39,7 @@ const listenToMessages = message => {
             "😔 Sorry, I can't download this video right now. Please try again later.",
           )
         } else {
+          bot.deleteMessage(chat.id, message.message_id)
           bot.deleteMessage(chat.id, waitMessage.message_id)
 
           const senderName =
