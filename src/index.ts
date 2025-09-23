@@ -1,6 +1,6 @@
 import Telegram, { type Message } from 'node-telegram-bot-api'
 import request from 'request'
-import config from './config'
+import config from './config.js'
 
 const token = config.botToken
 if (!token) {
