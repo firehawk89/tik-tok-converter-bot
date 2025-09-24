@@ -1,6 +1,7 @@
 import Telegram, { type Message } from 'node-telegram-bot-api'
 import request from 'request'
 import config from './config.js'
+import { sleep } from './utils.js'
 
 const token = config.botToken
 if (!token) {
@@ -10,9 +11,6 @@ if (!token) {
 const bot = new Telegram(token, {
   polling: true,
 })
-
-const sleep = (time: number) =>
-  new Promise(resolve => setTimeout(resolve, time))
 
 const listenToMessages = (message: Message) => {
   const { text: messageText, chat, from } = message
@@ -31,7 +29,9 @@ const listenToMessages = (message: Message) => {
       request(tikTokApiUrl, function (error, response, body) {
         const json = JSON.parse(body)
 
-        if (json.data == undefined) {
+        console.log('Received JSON:', json)
+
+        if (!json || !json?.data) {
           bot.deleteMessage(chat.id, waitMessage.message_id)
           bot.sendMessage(
             chat.id,
