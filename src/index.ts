@@ -26,31 +26,50 @@ const listenToMessages = (message: Message) => {
       const tikTokApiUrl =
         'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
 
-      request(tikTokApiUrl, function (error, response, body) {
-        const json = JSON.parse(body)
+      request(
+        { url: tikTokApiUrl, json: true },
+        function (error, response, body) {
+          const isError =
+            error ||
+            response?.statusCode !== 200 ||
+            !body ||
+            typeof body !== 'object'
 
-        console.log('Received JSON:', json)
+          if (isError) {
+            console.error(error)
 
-        if (!json || !json?.data) {
-          bot.deleteMessage(chat.id, waitMessage.message_id)
-          bot.sendMessage(
-            chat.id,
-            "😔 Sorry, I can't download this video right now. Please try again later.",
-          )
-        } else {
-          bot.deleteMessage(chat.id, message.message_id)
-          bot.deleteMessage(chat.id, waitMessage.message_id)
+            bot.deleteMessage(chat.id, waitMessage.message_id)
 
-          const senderFirstName = from?.first_name ?? 'Unknown'
-          const senderLastName = from?.last_name ? ` ${from.last_name}` : ''
-          const senderName = `${senderFirstName}${senderLastName}`
-          const caption = `📤 Shared by: ${senderName}`
+            return bot.sendMessage(
+              chat.id,
+              "😔 Hmm, looks like I can't reach TikTok right now. Give it a sec and try again?",
+            )
+          }
 
-          sleep(500).then(() =>
-            bot.sendVideo(chat.id, json.data.hdplay, { caption }),
-          )
-        }
-      })
+          console.log('Received body:', body)
+          const json = JSON.parse(body)
+
+          if (!json || !json?.data) {
+            bot.deleteMessage(chat.id, waitMessage.message_id)
+            bot.sendMessage(
+              chat.id,
+              "😔 Sorry, I can't download this video right now. Please try again later.",
+            )
+          } else {
+            bot.deleteMessage(chat.id, message.message_id)
+            bot.deleteMessage(chat.id, waitMessage.message_id)
+
+            const senderFirstName = from?.first_name ?? 'Unknown'
+            const senderLastName = from?.last_name ? ` ${from.last_name}` : ''
+            const senderName = `${senderFirstName}${senderLastName}`
+            const caption = `📤 Shared by: ${senderName}`
+
+            sleep(500).then(() =>
+              bot.sendVideo(chat.id, json.data.hdplay, { caption }),
+            )
+          }
+        },
+      )
     })
   }
 }
