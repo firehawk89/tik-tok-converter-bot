@@ -18,6 +18,8 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
+    "noUnusedLocals": true,
+
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
