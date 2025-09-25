@@ -46,10 +46,9 @@ const listenToMessages = (message: Message) => {
             )
           }
 
-          console.log('Received body:', body)
-          const json = JSON.parse(body)
+          console.log('Received video:', body?.data?.hdplay)
 
-          if (!json || !json?.data) {
+          if (!body || !body?.data) {
             bot.deleteMessage(chat.id, waitMessage.message_id)
             bot.sendMessage(
               chat.id,
@@ -65,7 +64,7 @@ const listenToMessages = (message: Message) => {
             const caption = `📤 Shared by: ${senderName}`
 
             sleep(500).then(() =>
-              bot.sendVideo(chat.id, json.data.hdplay, { caption }),
+              bot.sendVideo(chat.id, body.data.hdplay, { caption }),
             )
           }
         },
