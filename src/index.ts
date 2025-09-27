@@ -22,9 +22,17 @@ const listenToMessages = (message: Message) => {
       bot.sendMessage(chat.id, '✨ Please send the video link'),
     )
   } else if (messageText?.includes('tiktok.com')) {
+    const tikTokUrlMatch = messageText.match(
+      /(https?:\/\/[^\s]*tiktok\.com[^\s]*)/i,
+    )
+    if (!tikTokUrlMatch) return
+
+    const tikTokUrl = tikTokUrlMatch[1]
+    const additionalText = messageText.replace(tikTokUrlMatch[0], '').trim()
+
     bot.sendMessage(chat.id, '⏳Please wait...').then(waitMessage => {
       const tikTokApiUrl =
-        'https://www.tikwm.com/api/?url=' + messageText + '&hd=1'
+        'https://www.tikwm.com/api/?url=' + tikTokUrl + '&hd=1'
 
       request(
         { url: tikTokApiUrl, json: true },
@@ -61,7 +69,11 @@ const listenToMessages = (message: Message) => {
             const senderFirstName = from?.first_name ?? 'Unknown'
             const senderLastName = from?.last_name ? ` ${from.last_name}` : ''
             const senderName = `${senderFirstName}${senderLastName}`
-            const caption = `📤 Shared by: ${senderName}`
+
+            let caption = `📤 Shared by: ${senderName}`
+            if (additionalText) {
+              caption += `\n\n💬 ${additionalText}`
+            }
 
             sleep(500).then(() =>
               bot.sendVideo(chat.id, body.data.hdplay, { caption }),
